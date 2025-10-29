@@ -1,15 +1,20 @@
-#include <TinyGPSPlus.h>
+#include "GNSSController.h"
 
-TinyGPSPlus gps;
+GNSSController::GNSSController(HardwareSerial& serialPort) : serialPort(serialPort), location(0, 0) {}
 
-void gps() {
-    while (Serial1.available() > 0) {
-        gps.encode(Serial1.read());
-        if (gps.location.isUpdated()) {
-            Serial.print("Latitude= "); 
-            Serial.print(gps.location.lat(), 6); 
-            Serial.print(" Longitude= "); 
-            Serial.println(gps.location.lng(), 6);
-        }
+Location GNSSController::getLocation() const {
+    return location;
+}
+
+Location GNSSController::updateLocation() {
+    while (serialPort.available()) {
+        gps.encode(serialPort.read());
     }
+
+    if (!gps.location.isUpdated()) {
+        return location;
+    }
+
+    location = Location(gps.location.lat(), gps.location.lng());
+    return location;
 }
