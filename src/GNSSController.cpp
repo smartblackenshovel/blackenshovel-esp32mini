@@ -8,10 +8,14 @@ Location GNSSController::getLocation() const {
 
 Location GNSSController::updateLocation() {
     while (serialPort.available()) {
-        gps.encode(serialPort.read());
+        int c = serialPort.read();
+        gps.encode(c);
     }
 
+    Serial.println();
+
     if (!gps.location.isUpdated()) {
+        Serial.println("Location not updated");
         return location;
     }
 
