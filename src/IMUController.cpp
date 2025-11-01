@@ -3,6 +3,9 @@
 IMUController::IMUController() : imu() {}
 
 bool IMUController::begin() {
+    if (imuWire) {
+        delete imuWire;
+    }
     imuWire = new TwoWire(0);
     imuWire->begin(4, 3);
     Serial.println("Initializing IMU...");
@@ -10,14 +13,16 @@ bool IMUController::begin() {
         Serial.println("Failed to find LSM6DSOX sensor!");
         return false;
     }
+    Serial.println("LSM6DSOX sensor found!");
     return true;
 }
 
 IMU IMUController::readIMU() {
     sensors_event_t accelEvent;
     sensors_event_t gyroEvent;
+    sensors_event_t tempEvent;
 
-    imuSensor.getEvent(&accelEvent, &gyroEvent, nullptr);
+    imuSensor.getEvent(&accelEvent, &gyroEvent, &tempEvent);
 
     Accelerometer a(accelEvent.acceleration.x, accelEvent.acceleration.y, accelEvent.acceleration.z);
     Gyroscope g(gyroEvent.gyro.x, gyroEvent.gyro.y, gyroEvent.gyro.z);
