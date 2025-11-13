@@ -7,7 +7,7 @@ bool IMUController::begin() {
         delete imuWire;
     }
     imuWire = new TwoWire(0);
-    imuWire->begin(4, 3);
+    imuWire->begin(PIN_SDA, PIN_SCL);
     Serial.println("Initializing IMU...");
     if (!imuSensor.begin_I2C(106, imuWire)) {
         Serial.println("Failed to find LSM6DSOX sensor!");
