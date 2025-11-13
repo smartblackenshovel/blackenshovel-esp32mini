@@ -13,9 +13,12 @@ IMUController imuController;
 
 void setup() {
   Serial.begin(115200);
-  Serial1.begin(9600, SERIAL_8N1, GNSS_RX_PIN, GNSS_TX_PIN); // RX=2, TX=1
-  if (!imuController.begin()) {
-      while (1);
+  Serial1.begin(9600, SERIAL_8N1, GNSS_RX_PIN, GNSS_TX_PIN);
+
+  Serial.println("Initializing IMU...");
+  while(!imuController.begin()) {
+      Serial.println("IMU not ready. Still initializing...");
+      delay(100);
   }
 }
 
