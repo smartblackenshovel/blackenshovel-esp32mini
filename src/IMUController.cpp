@@ -15,15 +15,15 @@ bool IMUController::begin() {
     return true;
 }
 
-IMU IMUController::readIMU() {
+IMU IMUController::read() {
     sensors_event_t accelEvent;
     sensors_event_t gyroEvent;
     sensors_event_t tempEvent;
 
     imuSensor.getEvent(&accelEvent, &gyroEvent, &tempEvent);
 
-    Accelerometer a(accelEvent.acceleration.x, accelEvent.acceleration.y, accelEvent.acceleration.z);
-    Gyroscope g(gyroEvent.gyro.x, gyroEvent.gyro.y, gyroEvent.gyro.z);
-    imu = IMU(a, g);
+    accel = Accelerometer(accelEvent.acceleration.x, accelEvent.acceleration.y, accelEvent.acceleration.z);
+    gyro = Gyroscope(gyroEvent.gyro.x, gyroEvent.gyro.y, gyroEvent.gyro.z);
+    imu = IMU(accel, gyro);
     return imu;
 }

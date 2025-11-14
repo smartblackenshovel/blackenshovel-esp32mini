@@ -12,11 +12,9 @@ class IMUController {
         Accelerometer accel;
         Gyroscope gyro;
         IMU imu;
-        double accelX, accelY, accelZ;
-        double gyroX, gyroY, gyroZ;
 
     public:
         IMUController();
         bool begin();
-        IMU readIMU();
+        IMU read();
 };

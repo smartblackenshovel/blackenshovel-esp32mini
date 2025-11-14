@@ -27,7 +27,7 @@ void loop() {
     Location loc = gnss.updateLocation();
     
     // Read IMU
-    IMU imu = imuController.readIMU();
+    IMU imu = imuController.read();
 
     // Print GNSS
     Serial.print("Latitude: ");
