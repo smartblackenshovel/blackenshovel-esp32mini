@@ -36,13 +36,13 @@ void loop() {
     Serial.println(loc.getLongitude(), 6);
 
     // Print IMU accelerometer
-    Accelerometer accel = imu.getAccelerometer();
+    const Accelerometer& accel = imu.getAccelerometer();
     Serial.print("Accel X: "); Serial.print(accel.getX());
     Serial.print(" Y: "); Serial.print(accel.getY());
     Serial.print(" Z: "); Serial.println(accel.getZ());
 
     // Print IMU gyroscope
-    Gyroscope gyro = imu.getGyroscope();
+    const Gyroscope& gyro = imu.getGyroscope();
     Serial.print("Gyro X: "); Serial.print(gyro.getX());
     Serial.print(" Y: "); Serial.print(gyro.getY());
     Serial.print(" Z: "); Serial.println(gyro.getZ());
