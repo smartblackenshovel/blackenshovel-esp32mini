@@ -12,19 +12,12 @@ SessionManager::SessionManager(SerialPortWriter& serialPortWriter,
       imuController(imuController),
       userLoc(0, 0) {}
 
-void SessionManager::setUsers(std::vector<User> newUsers) {
-  if (!users.empty()) {
-    return;
-  }
-  users = newUsers;
-}
-
-void SessionManager::selectUser(String name) {
+void SessionManager::selectUser(String id) {
   if (selectedUser != nullptr) {
     return;
   }
   for (User& user : users) {
-    if (user.getName() == name) {
+    if (user.getId() == id) {
       selectedUser = &user;
     }
   }
@@ -38,7 +31,7 @@ void SessionManager::fetchUsers() {
     Serial.println("Users fetched successfully.");
     Serial.println(usersResponse.getContent());
     JsonDocument jsonUsers = usersResponse.getContentAsJson();
-    setUsers(parseUsers(jsonUsers));
+    users = parseUsers(jsonUsers);
   } else {
     Serial.printf("Failed to fetch users. Status code: %d\n",
                   usersResponse.getStatusCode());
@@ -47,11 +40,12 @@ void SessionManager::fetchUsers() {
 
 void SessionManager::fetchShovel() {
   HTTPResponse shovelsResponse =
-      httpHandler.get(endpointShovels, {{"id", shovelId}});
+      httpHandler.get(endpointShovels, {{"serial_number", shovelSerialNumber}});
 
   if (shovelsResponse.isSuccess()) {
     Serial.println("Shovel fetched successfully.");
     Serial.println(shovelsResponse.getContent());
+    shovelId = extractValues(shovelsResponse.getContentAsJson(), "id")[0];
     organizationId = extractValues(shovelsResponse.getContentAsJson(), "organization_id")[0];
   } else {
     Serial.printf("Failed to fetch shovel. Status code: %d\n",
@@ -75,7 +69,10 @@ void SessionManager::fetchOrganization() {
 void SessionManager::updateSession() {
   if (sessionId.isEmpty()) {
     createSession();
+    return;
   }
+  fetchSpot();
+
   userLoc = gnssController.updateLocation();
   userImu = imuController.read();
 
@@ -87,21 +84,26 @@ void SessionManager::updateSession() {
   serialPortWriter.writeImu(userImu);
   serialPortWriter.writeUserLoc(userLoc);
 
-  if (spot == nullptr) {
-    fetchSpot();
-  }
+  fetchSpot();
 
   // Write Session Log
 }
 
 void SessionManager::beginSession() {
-  fetchShovel();
-  fetchOrganization();
-  fetchUsers();
+  if (organizationId.isEmpty()) {
+    fetchShovel();
+    fetchOrganization();
+  }
+  if (users.empty()) {
+    fetchUsers();
+  }
 }
 
 void SessionManager::createSession() {
-  if (selectedUser == nullptr) { return; }
+  if (selectedUser == nullptr) {
+    serialPortWriter.writeUsers(users);
+    return; 
+  }
   JsonDocument sessionPayload;
   sessionPayload["user_id"] = selectedUser->getId();
   sessionPayload["shovel_id"] = shovelId;
@@ -142,5 +144,18 @@ void SessionManager::createSessionLog() {
 
 void SessionManager::fetchSpot() {
   if (spot != nullptr) { return; }
+  HTTPResponse spotResponse = httpHandler.get(
+    endpointSpots, {{"organization_id", organizationId}}
+  );
+
+  if (spotResponse.isSuccess()) {
+    Serial.println("Spots requested successfully");
+    Serial.println(spotResponse.getContent());
+    JsonDocument jsonSpots = spotResponse.getContentAsJson();
+    spots = parseSpots(jsonSpots);
+  } else {
+    Serial.printf("Failed to get spots. Status code: %d\n," spotResponse.getStatusCode());
+  }
+
   // TO DO
 }
