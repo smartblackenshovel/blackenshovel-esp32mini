@@ -22,23 +22,8 @@
 WiFiClientSecure securedClient;
 const char* ssid = "iPhone de Lauro";
 const char* password = "lolo1234";
-char url[] = "https://short-teams-worry.loca.lt";
 
-String organizationId;
-
-char endpointOrganizations[] = "/organizations";
-char endpointShovels[] = "/shovels";
-char endpointUsers[] = "/users";
-char endpointSpots[] = "/spots";
-char endpointSessions[] = "/sessions";
-char endpointSpotLogs[] = "/spot_logs";
-char endpointSessionLogs[] = "/session_logs";
-char mapEndpoint[] = "/map?lat=47.2229&lon=8.8169";
-
-String shovelSerialNumber = "BS-#13823429-02";
-String shovelId;
-String sessionId;
-
+char url[] = "https://modern-dryers-stick.loca.lt";
 HTTPHandler httpHandler(url);
 
 GNSSController gnss(Serial1);
@@ -89,7 +74,6 @@ void setup() {
   Serial.println("Time initialized.");
 
   //-------------------------------------------------------------------------------------
-  
   sessionManager.beginSession();
   #endif
 }
@@ -97,55 +81,5 @@ void setup() {
 void loop() {
   serialPortReaderCYD.read();
   sessionManager.updateSession();
-
-  if (sessionManager.getSessionUser() != nullptr && shovelId) {
-    JsonDocument sessionPayload;
-    sessionPayload["user_id"] = sessionManager.getSessionUser()->getId();
-    sessionPayload["shovel_id"] = shovelId;
-
-    HTTPResponse sessionResponse = httpHandler.post(
-      endpointSessions,
-      sessionPayload
-    );
-
-    if (sessionResponse.isSuccess()) {
-      Serial.println("Session created successfully.");
-      Serial.println(sessionResponse.getContent());
-      sessionId = extractValues(sessionResponse.getContentAsJson(), "id")[0];
-    } else {
-      Serial.printf("Failed to create session. Status code: %d\n", sessionResponse.getStatusCode());
-      return;
-    }
-  }
-
-  if (sessionId) {
-    // serialPortWriterCYD.writeIMU
-    // serialPortWriterCYD.writeUserLocation
-    // serialPortWriterCYD.writeSpotLocation
-  }
-
-  JsonDocument docImu;
-  docImu["msgType"] = "imu";
-  docImu["data"]["accel"]["x"] = accel.getX();
-  docImu["data"]["accel"]["y"] = accel.getY();
-  docImu["data"]["accel"]["z"] = accel.getZ();
-  docImu["data"]["gyro"]["x"] = gyro.getX();
-  docImu["data"]["gyro"]["y"] = gyro.getY();
-  docImu["data"]["gyro"]["z"] = gyro.getZ();
-  serializeJson(docImu, Serial2);
-
-  JsonDocument docUserLoc;
-  docUserLoc["msgType"] = "userLoc";
-  docUserLoc["data"]["lat"] = loc.getLatitude();
-  docUserLoc["data"]["lon"] = loc.getLongitude();
-  serializeJson(docUserLoc, Serial2);
-
-  JsonDocument docUsers;
-  docUsers["msgType"] = "users";
-  for (size_t i = 0; i < sessionManager.getUsers().size(); i++) {
-    docUsers["data"][i]["name"] = sessionManager.getUsers()[i].getName();
-    docUsers["data"][i]["id"] = sessionManager.getUsers()[i].getId();
-  }
-  serializeJson(docUsers, Serial2);
-
+  delay(500);
 }
