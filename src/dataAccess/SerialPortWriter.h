@@ -7,6 +7,7 @@
 class SerialPortWriter {
     public:
         SerialPortWriter(HardwareSerial& serial) : serialPort(serial) {}
+        void writeUsers(std::vector<User>& users);
         void writeImu(const IMU& imu);
         void writeUserLoc(const Location& loc);
         void writeSpotLoc(const Location& loc);
