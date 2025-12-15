@@ -16,8 +16,8 @@ std::vector<Spot> parseSpots(JsonDocument& doc) {
     JsonArray arr = doc.as<JsonArray>();
     for (JsonObject obj : arr) {
         String id = obj["id"].as<String>();
-        double lat = obj["lat"].as<double>();
-        double lon = obj["lon"].as<double>();
+        double lat = obj["latitude"].as<double>();
+        double lon = obj["longitude"].as<double>();
         spots.push_back(Spot(id, lat, lon));
     } 
     return spots;

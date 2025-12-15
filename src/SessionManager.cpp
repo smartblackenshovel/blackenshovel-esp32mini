@@ -115,7 +115,7 @@ void SessionManager::createSession() {
   if (sessionResponse.isSuccess()) {
     Serial.println("Session created successfully.");
     Serial.println(sessionResponse.getContent());
-    sessionId = extractValues(sessionResponse.getContentAsJson(), "id")[0];
+    sessionId = sessionResponse.getContentAsJson()["id"].as<String>();
   } else {
     Serial.printf("Failed to create session. Status code: %d\n",
                   sessionResponse.getStatusCode());
@@ -161,5 +161,8 @@ void SessionManager::fetchSpots() {
 
 void SessionManager::calcNextSpot() {
   // TO DO
-  nextSpot = &spots[0];
+  if (nextSpot == nullptr) {
+    Serial.println("Calculating next spot!");
+    nextSpot = &spots[0];
+  }
 }

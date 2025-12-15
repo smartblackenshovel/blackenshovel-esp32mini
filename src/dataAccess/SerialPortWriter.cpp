@@ -12,6 +12,10 @@ void SerialPortWriter::writeUsers(std::vector<User>& users) {
 }
 
 void SerialPortWriter::writeImu(const IMU& imu) {
+    Serial.println("Writing IMU Data to CYD");
+    Serial.println(imu.getAccelerometer().getX());
+    Serial.println(imu.getGyroscope().getX());
+
     JsonDocument docImu;
     docImu["msgType"] = "imu";
     docImu["data"]["accel"]["x"] = imu.getAccelerometer().getX();
@@ -24,8 +28,12 @@ void SerialPortWriter::writeImu(const IMU& imu) {
 }
 
 void SerialPortWriter::writeUserLoc(const Location& loc) {
+    Serial.println("Writing User Location to CYD");
+    Serial.println(loc.getLatitude());
+    Serial.println(loc.getLongitude());
+
     JsonDocument docUserLoc;
-    docUserLoc["msgType"] = "userLoc";
+    docUserLoc["msgType"] = "userLoc"; 
     docUserLoc["data"]["lat"] = loc.getLatitude();
     docUserLoc["data"]["lon"] = loc.getLongitude();
     serializeJson(docUserLoc, serialPort);
@@ -33,6 +41,10 @@ void SerialPortWriter::writeUserLoc(const Location& loc) {
 }
 
 void SerialPortWriter::writeSpotLoc(const Location& loc) {
+    Serial.println("Writing Spot Location to CYD");
+    Serial.println(loc.getLatitude());
+    Serial.println(loc.getLongitude());
+
     JsonDocument docSpotLoc;
     docSpotLoc["msgType"] = "spotLoc";
     docSpotLoc["data"]["lat"] = loc.getLatitude();
