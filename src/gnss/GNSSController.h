@@ -1,3 +1,4 @@
+#pragma once
 #include <TinyGPSPlus.h>
 #include "../models/Location.h"
 
