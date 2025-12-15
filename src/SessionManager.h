@@ -43,14 +43,16 @@ class SessionManager : public ISessionUpdater {
   String shovelId;
   String organizationId;
   String sessionId;
-  Spot* spot = nullptr;
+  Spot* nextSpot = nullptr;
 
   void fetchShovel();
   void fetchOrganization();
   void fetchUsers();
-  void fetchSpot();
+  void fetchSpots();
   void createSession();
   void createSessionLog();
+
+  void calcNextSpot();
 
   String endpointOrganizations = "/organizations";
   String endpointShovels = "/shovels";

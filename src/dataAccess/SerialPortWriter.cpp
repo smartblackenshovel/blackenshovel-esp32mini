@@ -33,5 +33,9 @@ void SerialPortWriter::writeUserLoc(const Location& loc) {
 }
 
 void SerialPortWriter::writeSpotLoc(const Location& loc) {
-    // TO DO
+    JsonDocument docSpotLoc;
+    docSpotLoc["msgType"] = "spotLoc";
+    docSpotLoc["data"]["lat"] = loc.getLatitude();
+    docSpotLoc["data"]["lon"] = loc.getLongitude();
+    serializeJson(docSpotLoc, serialPort);
 }

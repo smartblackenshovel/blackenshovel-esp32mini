@@ -71,7 +71,9 @@ void SessionManager::updateSession() {
     createSession();
     return;
   }
-  fetchSpot();
+
+  fetchSpots();
+  calcNextSpot();
 
   userLoc = gnssController.updateLocation();
   userImu = imuController.read();
@@ -83,10 +85,9 @@ void SessionManager::updateSession() {
 
   serialPortWriter.writeImu(userImu);
   serialPortWriter.writeUserLoc(userLoc);
+  serialPortWriter.writeSpotLoc(nextSpot->getLocation());
 
-  fetchSpot();
-
-  // Write Session Log
+  // TO DO Write Session Log
 }
 
 void SessionManager::beginSession() {
@@ -142,8 +143,8 @@ void SessionManager::createSessionLog() {
     }
 }
 
-void SessionManager::fetchSpot() {
-  if (spot != nullptr) { return; }
+void SessionManager::fetchSpots() {
+  if (nextSpot != nullptr) { return; }
   HTTPResponse spotResponse = httpHandler.get(
     endpointSpots, {{"organization_id", organizationId}}
   );
@@ -154,8 +155,11 @@ void SessionManager::fetchSpot() {
     JsonDocument jsonSpots = spotResponse.getContentAsJson();
     spots = parseSpots(jsonSpots);
   } else {
-    Serial.printf("Failed to get spots. Status code: %d\n," spotResponse.getStatusCode());
+    Serial.printf("Failed to get spots. Status code: %d\n", spotResponse.getStatusCode());
   }
+}
 
+void SessionManager::calcNextSpot() {
   // TO DO
+  nextSpot = &spots[0];
 }
