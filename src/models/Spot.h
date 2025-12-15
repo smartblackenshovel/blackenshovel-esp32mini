@@ -7,8 +7,8 @@ class Spot {
         String id;
         Location loc;
     public:
-        Spot(const String& spotId)
-            : id(spotId), loc(0, 0) {}
+        Spot(const String& spotId, double lat, double lon)
+            : id(spotId), loc(lat, lon) {}
         String getId() const { return id; }
         void setLocation(double latitude, double longitude) {
             loc = Location(latitude, longitude);
