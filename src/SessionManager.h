@@ -41,15 +41,17 @@ class SessionManager : public ISessionUpdater {
   IMU userImu;
 
 
-  String shovelId;
+  String shovelId = shovelSerialNumber;
   String organizationId;
   String sessionId;
   Spot* spot = nullptr;
 
+  void fetchShovel();
   void fetchOrganization();
   void fetchUsers();
-  void createSession();
   void fetchSpot();
+  void createSession();
+  void createSessionLog();
 
   String endpointOrganizations = "/organizations";
   String endpointShovels = "/shovels";
