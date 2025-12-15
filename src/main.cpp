@@ -23,7 +23,7 @@ WiFiClientSecure securedClient;
 const char* ssid = "iPhone de Lauro";
 const char* password = "lolo1234";
 
-char url[] = "https://modern-dryers-stick.loca.lt";
+char url[] = "https://two-words-juggle.loca.lt";
 HTTPHandler httpHandler(url);
 
 GNSSController gnss(Serial1);
@@ -41,7 +41,6 @@ void setup() {
 
   Serial.println("Initializing IMU...");
   while(!imu.begin()) {
-      Serial.println("IMU not ready. Still initializing...");
       delay(100);
   }
 
@@ -53,7 +52,6 @@ void setup() {
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
   }
   Serial.println("");
   Serial.println("WiFi connected");
@@ -69,7 +67,6 @@ void setup() {
   time_t now;
   while ((now = time(NULL)) < 8 * 3600 * 2) {
     delay(500);
-    Serial.print(".");
   }
   Serial.println("Time initialized.");
 
