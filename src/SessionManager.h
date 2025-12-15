@@ -19,9 +19,8 @@ class SessionManager : public ISessionUpdater {
  public:
   SessionManager(SerialPortWriter& serialPortWriter, HTTPHandler& httpHandler,
                  GNSSController& gnssController, IMUController& imuController);
-  void setUsers(std::vector<User> newUsers) override;
   std::vector<User> getUsers() const { return users; }
-  void selectUser(String name) override;
+  void selectUser(String id) override;
   User* getSessionUser() const { return selectedUser; }
 
   void beginSession();
@@ -29,6 +28,7 @@ class SessionManager : public ISessionUpdater {
 
  private:
   std::vector<User> users;
+  std::vector<Spot> spots;
   User* selectedUser = nullptr;
 
   SerialPortWriter& serialPortWriter;
@@ -40,8 +40,7 @@ class SessionManager : public ISessionUpdater {
   Location userLoc;
   IMU userImu;
 
-
-  String shovelId = shovelSerialNumber;
+  String shovelId;
   String organizationId;
   String sessionId;
   Spot* spot = nullptr;
