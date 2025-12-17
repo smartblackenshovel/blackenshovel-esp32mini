@@ -6,6 +6,7 @@
 #include "imu/IMUController.h"
 #include "http/HTTPHandler.h"
 #include "utils/JsonUtils.h"
+#include "utils/utils.h"
 #include "SessionManager.h"
 #include "dataAccess/SerialPortWriter.h"
 #include "dataAccess/SerialPortReader.h"
@@ -17,13 +18,11 @@
 #define CYD_RX_PIN 6
 #define CYD_TX_PIN 5
 
-#define HTTP_ACTIVE 1
-
 WiFiClientSecure securedClient;
-const char* ssid = "iPhone de Lauro";
-const char* password = "lolo1234";
+const char* ssid = "Ramona";
+const char* password = "RamiVani";
 
-char url[] = "https://two-words-juggle.loca.lt";
+char url[] = "https://grumpy-drinks-tie.loca.lt";
 HTTPHandler httpHandler(url);
 
 GNSSController gnss(Serial1);
@@ -35,48 +34,50 @@ SessionManager sessionManager(serialPortWriterCYD, httpHandler, gnss, imu);
 SerialPortReader serialPortReaderCYD(Serial2, sessionManager);
 
 void setup() {
+  #if DEBUG
   Serial.begin(115200);
+  #endif
   Serial1.begin(9600, SERIAL_8N1, GNSS_RX_PIN, GNSS_TX_PIN);
   Serial2.begin(9600, SERIAL_8N1, CYD_RX_PIN, CYD_TX_PIN);
 
-  Serial.println("Initializing IMU...");
+  logMsg("Initializing IMU...");
   while(!imu.begin()) {
       delay(100);
   }
 
   //-------------------------------------------------------------------------------------
   #if HTTP_ACTIVE
-  Serial.println("Connecting to WiFi...");
+  logMsg("Connecting to WiFi...");
 
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
   }
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println(WiFi.localIP());
+  logMsg("");
+  logMsg("WiFi connected");
+  logMsg(WiFi.localIP());
 
   securedClient.setInsecure();
   
   //-------------------------------------------------------------------------------------
 
-  Serial.println("Syncing time...");
+  logMsg("Syncing time...");
   configTime(0, 0, "pool.ntp.org", "time.nist.gov"); 
-  Serial.println("Waiting for time...");
+  logMsg("Waiting for time...");
   time_t now;
   while ((now = time(NULL)) < 8 * 3600 * 2) {
     delay(500);
   }
-  Serial.println("Time initialized.");
+  logMsg("Time initialized.");
 
   //-------------------------------------------------------------------------------------
-  sessionManager.beginSession();
   #endif
+  sessionManager.beginSession();
 }
 
 void loop() {
   serialPortReaderCYD.read();
   sessionManager.updateSession();
-  delay(500);
+  delay(1000);
 }

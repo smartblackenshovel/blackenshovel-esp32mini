@@ -1,4 +1,5 @@
 #include "JsonUtils.h"
+#include "utils/utils.h"
 
 std::vector<User> parseUsers(JsonDocument& doc) {
     std::vector<User> users;

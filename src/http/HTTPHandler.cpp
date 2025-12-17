@@ -1,3 +1,4 @@
+#include "utils/utils.h"
 #include "HTTPHandler.h"
 
 HTTPHandler::HTTPHandler(const String& baseUrl) : baseUrl(baseUrl) {}
@@ -52,7 +53,7 @@ String mapToJsonString(const JsonDocument& json) {
 HTTPResponse HTTPHandler::request(Method method, const String& endpoint,
                             const String& payload, const String& contentType) {
   String url = buildUrl(endpoint);
-  Serial.println("Request URL: " + url);
+  logMsg("Request URL: " + url);
   httpClient.begin(url);
 
   int code = -1;

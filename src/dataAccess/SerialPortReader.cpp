@@ -1,4 +1,5 @@
 #include "utils/JsonUtils.h"
+#include "utils/utils.h"
 #include "SerialPortReader.h"
 
 void SerialPortReader::read() {
@@ -8,8 +9,8 @@ void SerialPortReader::read() {
     JsonDocument doc;
     DeserializationError error = deserializeJson(doc, serialPort);
     if (error) {
-        Serial.print("Failed to parse JSON from Serial Port: ");
-        Serial.println(error.c_str());
+        logMsg("Failed to parse JSON from Serial Port: ");
+        logMsg(error.c_str());
         return;
     }
     String msgType = doc["msgType"].as<String>();

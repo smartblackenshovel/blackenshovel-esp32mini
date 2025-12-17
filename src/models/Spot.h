@@ -14,6 +14,6 @@ class Spot {
         void setLocation(double latitude, double longitude) {
             loc = Location(latitude, longitude);
         }
-        Location getLocation() { return loc; }
+        Location getLocation() const { return loc; }
         void complete() { isCompleted = true; }
 };

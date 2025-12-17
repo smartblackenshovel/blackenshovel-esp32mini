@@ -12,8 +12,6 @@ Location GNSSController::updateLocation() {
         gps.encode(c);
     }
 
-    Serial.println();
-
     if (!gps.location.isUpdated()) {
         return location;
     }

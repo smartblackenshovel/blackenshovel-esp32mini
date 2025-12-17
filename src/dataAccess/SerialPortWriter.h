@@ -1,8 +1,9 @@
 #pragma once
 #include <Arduino.h>
-#include "models/User.h"
 #include "imu/IMU.h"
 #include "models/Location.h"
+#include "models/Spot.h"
+#include "models/User.h"
 
 class SerialPortWriter {
     public:
@@ -10,7 +11,7 @@ class SerialPortWriter {
         void writeUsers(std::vector<User>& users);
         void writeImu(const IMU& imu);
         void writeUserLoc(const Location& loc);
-        void writeSpotLoc(const Location& loc);
+        void writeSpot(const Spot& loc);
     private:
         HardwareSerial& serialPort;
 };

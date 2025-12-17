@@ -6,6 +6,8 @@
 
 #include <map>
 
+#define HTTP_ACTIVE 0
+
 class HTTPHandler {
  public:
   explicit HTTPHandler(const String& baseUrl);

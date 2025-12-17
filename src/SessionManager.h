@@ -59,6 +59,6 @@ class SessionManager : public ISessionUpdater {
   String endpointUsers = "/users";
   String endpointSpots = "/spots";
   String endpointSessions = "/sessions";
-  String endpointSpotLogs = "/spot_logs";
-  String endpointSessionLogs = "/session_logs";
+  String endpointSpotLogs = "/spot_logMsgs";
+  String endpointSessionLogs = "/session_logMsgs";
 };
