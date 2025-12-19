@@ -16,3 +16,6 @@ PlatformIO is more than just an IDE plugin — it’s a complete ecosystem for e
 ## Setup
 - Build the project. This will install all labs automatically
 - Platformio finds your device port automatically when uploading. In case of any issues, you can check PIO Home -> Devices.
+- Setup DEBUG and HTTP_ACTIVE according to your objectives. Setting DEBUG 1 and HTTP_ACTIVE 0 can help you while testing. **Remind to replace ssid, password and url if HTTP_ACTIVE 1.**
+    - DEBUG will use the serial monitor to display all logs and also dump the GNSS location (which works only in open fields)
+    - HTTP_ACTIVE will make requests to the API if 1. If 0, will use dummy returns.

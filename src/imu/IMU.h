@@ -1,3 +1,5 @@
+#pragma once
+
 class Accelerometer {
     private:
         double x, y, z;

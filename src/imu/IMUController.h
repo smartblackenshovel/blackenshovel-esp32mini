@@ -1,3 +1,4 @@
+#pragma once
 #include <Wire.h>
 #include <Adafruit_LSM6DSOX.h>
 #include "IMU.h"

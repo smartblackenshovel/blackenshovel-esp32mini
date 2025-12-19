@@ -1,5 +1,6 @@
+#pragma once
 #include <TinyGPSPlus.h>
-#include "Location.h"
+#include "../models/Location.h"
 
 class GNSSController {
     private:
