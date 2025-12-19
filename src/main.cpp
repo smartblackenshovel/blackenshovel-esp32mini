@@ -19,10 +19,10 @@
 #define CYD_TX_PIN 5
 
 WiFiClientSecure securedClient;
-const char* ssid = "Ramona";
-const char* password = "RamiVani";
+const char* ssid = "";
+const char* password = "";
 
-char url[] = "https://grumpy-drinks-tie.loca.lt";
+char url[] = "";
 HTTPHandler httpHandler(url);
 
 GNSSController gnss(Serial1);
