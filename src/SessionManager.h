@@ -21,6 +21,7 @@ class SessionManager : public ISessionUpdater {
                  GNSSController& gnssController, IMUController& imuController);
   std::vector<User> getUsers() const { return users; }
   void selectUser(String id) override;
+  void completeSpot(String id) override;
   User* getSessionUser() const { return selectedUser; }
 
   void beginSession();
@@ -30,6 +31,7 @@ class SessionManager : public ISessionUpdater {
   std::vector<User> users;
   std::vector<Spot> spots;
   User* selectedUser = nullptr;
+  int pos = 0;
 
   SerialPortWriter& serialPortWriter;
 
@@ -52,7 +54,7 @@ class SessionManager : public ISessionUpdater {
   void createSession();
   void createSessionLog();
 
-  void calcNextSpot();
+  void calcNextSpot(int pos);
 
   String endpointOrganizations = "/organizations";
   String endpointShovels = "/shovels";

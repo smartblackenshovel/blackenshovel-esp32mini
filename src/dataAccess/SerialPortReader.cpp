@@ -18,5 +18,8 @@ void SerialPortReader::read() {
     if (msgType == "selectedUser") {
         sessionUpdater.selectUser(doc["data"]["id"].as<String>());
         return;
+    } else if (msgType == "completedSpot") {
+        sessionUpdater.completeSpot(doc["data"]["id"].as<String>());
+        return;
     }
 }

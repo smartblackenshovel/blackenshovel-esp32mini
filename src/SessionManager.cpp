@@ -23,6 +23,12 @@ void SessionManager::selectUser(String id) {
   }
 }
 
+void SessionManager::completeSpot(String id) {
+  logMsg("Spot is finished, removing current");
+  nextSpot = nullptr;
+  pos++;
+}
+
 void SessionManager::fetchUsers() {
   #if HTTP_ACTIVE
   HTTPResponse usersResponse =
@@ -88,7 +94,7 @@ void SessionManager::updateSession() {
   }
 
   fetchSpots();
-  calcNextSpot();
+  calcNextSpot(pos);
 
   #if DEBUG
   Location userLoc(47.2227642, 8.8166369);
@@ -100,9 +106,7 @@ void SessionManager::updateSession() {
   const Accelerometer& accel = userImu.getAccelerometer();
   const Gyroscope& gyro = userImu.getGyroscope();
 
-  logMsg("this line is executed");
   selectedUser->setLocation(userLoc.getLatitude(), userLoc.getLongitude());
-  logMsg("This line is never executed");
 
   serialPortWriter.writeImu(userImu);
   serialPortWriter.writeUserLoc(userLoc);
@@ -179,6 +183,7 @@ void SessionManager::createSessionLog() {
 
 void SessionManager::fetchSpots() {
   if (nextSpot != nullptr) { return; }
+  logMsg("fetching spots");
   #if HTTP_ACTIVE
   HTTPResponse spotResponse = httpHandler.get(
     endpointSpots, {{"organization_id", organizationId}}
@@ -231,10 +236,10 @@ void SessionManager::fetchSpots() {
   }
 }
 
-void SessionManager::calcNextSpot() {
+void SessionManager::calcNextSpot(int pos) {
   // TO DO
   if (nextSpot == nullptr) {
     logMsg("Calculating next spot!");
-    nextSpot = &spots[0];
+    nextSpot = &spots[pos];
   }
 }
